@@ -19,12 +19,12 @@ class FraisController extends Controller
 
         $visiteur = Auth::user();
 
-        $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->type_visiteur);
+        $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->id_visiteur);
 
         if ($visiteur->id_visiteur != $frais->id_visiteur && $typeVisiteur <= 1) {
             return redirect(route('login'));
         }
-        return json_encode($visiteur);
+        return json_encode($typeVisiteur);
     }
 
     public function ajoutFrais(Request $request)
@@ -38,7 +38,7 @@ class FraisController extends Controller
 
             $visiteur = Auth::user();
 
-            $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->type_visiteur);
+            $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->id_visiteur);
             if ($visiteur->id_visiteur != $request->json('id_visiteur') && $typeVisiteur <= 2) {
                 return redirect(route('login'));
             }
@@ -74,7 +74,7 @@ class FraisController extends Controller
 
             $visiteur = Auth::user();
 
-            $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->type_visiteur);
+            $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->id_visiteur);
 
             if ($visiteur->id_visiteur != $request->json('id_visiteur') && $typeVisiteur <= 2) {
                 return redirect(route('login'));
@@ -85,8 +85,17 @@ class FraisController extends Controller
             $champsFrais->anneemois = $request->json('anneemois');
             $champsFrais->id_visiteur = $request->json('id_visiteur');
             $champsFrais->nbjustificatifs = $request->json('nbjustificatifs');
-            $champsFrais->montantvalide = $request->json('montantvalide');
             $champsFrais->id_etat = $request->json('id_etat');
+
+            if ($visiteur->id_visiteur == $request->json('id_visiteur') || $typeVisiteur > 3) {
+                return response()->json(['message' => 'Fonctionne',
+                ]);
+                $champsFrais->montantvalide = $request->json('montantvalide');
+            }else {
+                $champsFrais->montantvalide = null;
+            }
+
+
 
             $serviceFrais = new ServiceFrais();
             $idFrais = $serviceFrais->updateFrais($champsFrais);
@@ -109,7 +118,7 @@ class FraisController extends Controller
             $frais = $serviceFrais->getFrais($idFrais);
 
             $visiteur = Auth::user();
-            $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->type_visiteur);
+            $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->id_visiteur);
 
             if ($visiteur->id_visiteur != $frais->id_visiteur && $typeVisiteur <= 2) {
                 return redirect(route('login'));
@@ -130,7 +139,7 @@ class FraisController extends Controller
 
             $visiteur = Auth::user();
 
-            $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->type_visiteur);
+            $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->id_visiteur);
 
             if ($visiteur->id_visiteur != $idVisiteur && $typeVisiteur <= 1) {
                 return redirect(route('login'));

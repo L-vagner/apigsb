@@ -8,13 +8,12 @@ use Exception;
 
 class ServiceVisiteur
 {
-    public static function getTypeVisiteur($idVisiteur): JsonResponse|int
+    public static function getTypeVisiteur($idVisiteur)
     {
         try {
             $typeVisiteur = DB::table('visiteur')
                 ->where('id_visiteur', '=', $idVisiteur)
                 ->value('type_visiteur');
-
 
             switch ($typeVisiteur) {
                 case 'I':

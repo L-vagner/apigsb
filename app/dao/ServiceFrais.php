@@ -59,13 +59,18 @@ class ServiceFrais
         $idEtat = $champsRequete->id_etat;
 
         try {
+            if (!is_null($montantvalide)) {
+                DB::table('frais')
+                    ->where('id_frais', '=', $idFrais)
+                    ->update(['montantvalide' => $montantvalide,
+                    ]);
+            }
             DB::table('frais')
                 ->where('id_frais', '=', $idFrais)
                 ->update(['anneemois' => $anneemois,
                     'nbjustificatifs' => $nbjustificatifs,
                     'id_visiteur' => $idVisiteur,
                     'id_etat' => $idEtat,
-                    'montantvalide' => $montantvalide,
                     'datemodification' => now()
                 ]);
         } catch (Exception $e) {

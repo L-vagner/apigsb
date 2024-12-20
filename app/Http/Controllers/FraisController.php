@@ -76,7 +76,7 @@ class FraisController extends Controller
 
             $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->type_visiteur);
 
-            if ($visiteur->id_visiteur != $request->json('id_visiteur') && $typeVisiteur <=2) {
+            if ($visiteur->id_visiteur != $request->json('id_visiteur') && $typeVisiteur <= 2) {
                 return redirect(route('login'));
             }
 
@@ -109,7 +109,9 @@ class FraisController extends Controller
             $frais = $serviceFrais->getFrais($idFrais);
 
             $visiteur = Auth::user();
-            if ($visiteur->id_visiteur != $frais->id_visiteur) {
+            $typeVisiteur = ServiceVisiteur::getTypeVisiteur($visiteur->type_visiteur);
+
+            if ($visiteur->id_visiteur != $frais->id_visiteur && $typeVisiteur <= 2) {
                 return redirect(route('login'));
             }
 
